@@ -1,0 +1,56 @@
+{% extends 'base.html' %}
+
+{% block title %}Books List{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Books List</h2>
+
+<div class="d-flex justify-content-between mb-3">
+    {% if user.is_staff or user.is_superuser %}
+        <a href="{% url 'book_add' %}" class="btn btn-success">Add New Book</a>
+    {% endif %}
+
+    <form method="get" class="d-flex" style="width: 350px;">
+        <input type="text" name="q" class="form-control me-2" placeholder="Search by title, author, ISBN">
+        <button type="submit" class="btn btn-primary">Search</button>
+    </form>
+</div>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Title</th>
+            <th>Author</th>
+            <th>Published Date</th>
+            <th>ISBN</th>
+            <th>Quantity</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for book in books %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ book.title }}</td>
+            <td>{{ book.author }}</td>
+            <td>{{ book.published_date|default:"-" }}</td>
+            <td>{{ book.isbn|default:"-" }}</td>
+            <td>{{ book.quantity }}</td>
+            <td>
+                {% if user.is_staff or user.is_superuser %}
+                    <a href="{% url 'book_edit' book.id %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'book_delete' book.id %}" class="btn btn-danger btn-sm">Delete</a>
+                {% else %}
+                    <span class="text-muted">No Action</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">No books available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

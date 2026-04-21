@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block title %}My Books{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">My Borrowed Books</h2>
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Book</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Fine</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in borrows %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ b.book.title }}</td>
+            <td>{{ b.issue_date }}</td>
+            <td>{{ b.due_date }}</td>
+            <td>{{ b.return_date|default:"-" }}</td>
+            <td>
+                {% if b.is_returned %}
+                    <span class="badge bg-success">Returned</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Not Returned</span>
+                {% endif %}
+            </td>
+            <td>₹{{ b.fine_amount }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="7" class="text-center">No books issued.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<div class="text-center mb-5">
+    <h1>Welcome to Library Management System</h1>
+    <p class="lead">Manage books, students, and issue-return records easily.</p>
+</div>
+
+<div class="row text-center mb-4">
+    <div class="col-md-3">
+        <div class="card bg-primary text-white shadow">
+            <div class="card-body">
+                <h3>{{ total_books }}</h3>
+                <p>Total Books</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-success text-white shadow">
+            <div class="card-body">
+                <h3>{{ total_students }}</h3>
+                <p>Total Students</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-warning text-dark shadow">
+            <div class="card-body">
+                <h3>{{ issued_books }}</h3>
+                <p>Issued Books</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card bg-info text-white shadow">
+            <div class="card-body">
+                <h3>{{ returned_books }}</h3>
+                <p>Returned Books</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="text-center mt-4">
+    <a href="{% url 'book_list' %}" class="btn btn-primary btn-lg me-2">View Books</a>
+    <a href="{% url 'student_list' %}" class="btn btn-info btn-lg me-2">View Students</a>
+    <a href="{% url 'borrow_list' %}" class="btn btn-warning btn-lg me-2">Borrow Records</a>
+    <a href="{% url 'book_add' %}" class="btn btn-success btn-lg me-2">Add Book</a>
+    <a href="/admin/" class="btn btn-dark btn-lg">Admin Panel</a>
+</div>
+{% endblock %}

@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block title %}Borrowed Books{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Borrowed Books</h2>
+
+{% if user.is_staff or user.is_superuser %}
+<div class="mb-3">
+    <a href="{% url 'borrow_add' %}" class="btn btn-success">Issue Book</a>
+</div>
+{% endif %}
+
+<table class="table table-bordered table-striped">
+    <thead class="table-dark">
+        <tr>
+            <th>#</th>
+            <th>Student</th>
+            <th>Book</th>
+            <th>Issue Date</th>
+            <th>Due Date</th>
+            <th>Return Date</th>
+            <th>Status</th>
+            <th>Fine</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for b in borrows %}
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ b.student.name }}</td>
+            <td>{{ b.book.title }}</td>
+            <td>{{ b.issue_date }}</td>
+            <td>{{ b.due_date }}</td>
+            <td>{{ b.return_date|default:"-" }}</td>
+            <td>
+                {% if b.is_returned %}
+                    <span class="badge bg-success">Returned</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">Not Returned</span>
+                {% endif %}
+            </td>
+            <td>₹{{ b.fine_amount }}</td>
+            <td>
+                {% if user.is_staff or user.is_superuser %}
+                    {% if not b.is_returned %}
+                        <a href="{% url 'borrow_return' b.id %}" class="btn btn-primary btn-sm">Return</a>
+                    {% else %}
+                        <span class="text-muted">Done</span>
+                    {% endif %}
+                {% else %}
+                    <span class="text-muted">No Action</span>
+                {% endif %}
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="9" class="text-center">No borrow records available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
